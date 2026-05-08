@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>近10年节假日旅游消费 × 央行支付交易 交叉分析报告（2016-2026 YTD）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root{
+  --bg:#0f1419; --card:#1a2027; --border:#2a3441;
+  --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff;
+  --red:#f85149; --green:#3fb950; --orange:#ff9f43; --purple:#a371f7;
+  --yellow:#d29922;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;font-size:14px;}
+.container{max-width:1400px;margin:0 auto;padding:32px 24px;}
+.header{text-align:center;padding:40px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px;}
+.header h1{font-size:32px;font-weight:700;margin-bottom:12px;background:linear-gradient(135deg,#58a6ff 0%,#a371f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.header .subtitle{color:var(--muted);font-size:15px;}
+.header .meta{display:inline-flex;gap:18px;margin-top:14px;font-size:13px;color:var(--muted);}
+.header .meta span{padding:4px 12px;background:var(--card);border-radius:16px;border:1px solid var(--border);}
+.section{margin-bottom:40px;}
+.section-title{font-size:20px;font-weight:600;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--accent);}
+.section-desc{color:var(--muted);margin-bottom:16px;font-size:13px;}
+.grid{display:grid;gap:16px;}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:1100px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card h3{font-size:16px;margin-bottom:12px;color:var(--text);}
+.kpi{display:flex;flex-direction:column;gap:4px;}
+.kpi .num{font-size:26px;font-weight:700;color:var(--accent);}
+.kpi .label{font-size:12px;color:var(--muted);}
+.kpi .delta{font-size:12px;}
+.up{color:var(--red);} /* 中国惯例：涨红 */
+.down{color:var(--green);}
+.chart{width:100%;height:400px;}
+.chart-lg{height:500px;}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);}
+th{background:#141a22;color:var(--muted);font-weight:500;text-align:center;position:sticky;top:0;}
+td:first-child,th:first-child{text-align:left;}
+tr:hover{background:#141a22;}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;margin-left:6px;}
+.tag-p0{background:rgba(248,81,73,.2);color:var(--red);}
+.tag-p1{background:rgba(255,159,67,.2);color:var(--orange);}
+.tag-p2{background:rgba(210,153,34,.2);color:var(--yellow);}
+.tag-p3{background:rgba(63,185,80,.2);color:var(--green);}
+.note{background:rgba(88,166,255,.08);border-left:3px solid var(--accent);padding:12px 16px;border-radius:4px;font-size:13px;color:var(--muted);margin:12px 0;}
+.footer{text-align:center;padding:24px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:40px;}
+ul.insights{list-style:none;padding-left:0;}
+ul.insights li{padding:10px 0;border-bottom:1px dashed var(--border);}
+ul.insights li:last-child{border-bottom:none;}
+ul.insights li strong{color:var(--accent);}
+.tab-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.tab-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:16px;cursor:pointer;font-size:13px;transition:all .2s;}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.tab-btn:hover:not(.active){color:var(--text);border-color:var(--accent);}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>近10年节假日旅游消费 × 央行支付交易 交叉分析</h1>
+  <div class="subtitle">2016–2026 YTD｜文旅部测算 × 中国人民银行（银联+网联）支付交易数据</div>
+  <div class="meta">
+    <span>覆盖节日：春节 / 清明 / 五一 / 端午 / 中秋 / 国庆</span>
+    <span>数据源：文化和旅游部、中国人民银行、中国银联、网联清算</span>
+    <span>更新日期：2026-05-08（含2026春节/清明/五一）</span>
+  </div>
+</div>
+
+<!-- 摘要卡片 -->
+<div class="section">
+  <h2 class="section-title">核心摘要</h2>
+  <div class="grid grid-4">
+    <div class="card kpi">
+      <div class="label">2026 YTD 三节（春+清+五一）出游</div>
+      <div class="num">10.56 <span style="font-size:14px;color:var(--muted);">亿人次</span></div>
+      <div class="delta up">同比2025年同期 +16.4%</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">2026 YTD 三节旅游花费</div>
+      <div class="num">10,503 <span style="font-size:14px;color:var(--muted);">亿元</span></div>
+      <div class="delta up">同比2025年同期 +15.7%</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">2026春节+五一央行支付金额</div>
+      <div class="num">20.97 <span style="font-size:14px;color:var(--muted);">万亿元</span></div>
+      <div class="delta up">同比 +20.2%（9天春节拉动）</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">2026春节+五一央行支付笔数</div>
+      <div class="num">682.39 <span style="font-size:14px;color:var(--muted);">亿笔</span></div>
+      <div class="delta up">同比 +39.6%（小额高频）</div>
+    </div>
+  </div>
+  <div class="note">
+    <strong>2026 YTD 看点：</strong>① 春节延至9天创历史最长黄金周，出游5.96亿人次/花费8034.83亿元双双新高；央行支付13.12万亿元（日均+19.26%）。
+    ② 五一3.25亿人次(+3.6%)/1854.92亿元(+2.9%)增速边际放缓，但境外来华支付笔数/金额同比+45.15%/+36.96%继续高增。
+    ③ 清明1.35亿人次(+6.8%)/613.67亿元(+6.6%)，"春假+清明6天连休"驱动家庭亲子。
+  </div>
+  <div class="note">
+    <strong>口径说明：</strong>① 旅游数据取自文化和旅游部数据中心测算，2020年"五一"起改为"国内旅游出游人次"口径（不含出境游）；2020年春节因疫情爆发未发布完整数据。
+    ② 央行数据为"银联+网联"合并处理的跨机构网络支付交易笔数/金额，不含银行行内转账；2019年国庆起稳定披露，早期年份部分口径为单独的"银联网络交易"。
+    ③ 2023、2025年"国庆中秋"合并为8天假期；2026年春节延至9天；与其他年份可比性有限，需按"日均"口径对照。
+  </div>
+</div>
+
+<!-- 1. 春节 -->
+<div class="section">
+  <h2 class="section-title">01 · 春节：最核心的消费爆发点</h2>
+  <p class="section-desc">近11年春节假期旅游人次从3.02亿增长至5.96亿（2026），假期天数由7天延长至9天（2026创历史最长）。2026年国内出游总花费达8034.83亿元再创新高；同期央行支付金额达13.12万亿元，日均交易笔数与金额分别同比+37.45%/+19.26%。</p>
+  <div class="grid grid-2">
+    <div class="card"><div id="chart_spring_tour" class="chart"></div></div>
+    <div class="card"><div id="chart_spring_pay" class="chart"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <h3>春节 · 日均消费强度 vs 日均支付强度</h3>
+    <div id="chart_spring_daily" class="chart"></div>
+  </div>
+</div>
+
+<!-- 2. 清明+五一+端午小长假 -->
+<div class="section">
+  <h2 class="section-title">02 · 小长假（清明 / 五一 / 端午）复苏节奏</h2>
+  <p class="section-desc">五一自2019年起延长至4天、2020年起5天，绝对量大幅跃升但2022年受疫情压制；清明、端午体量稳定在亿级人次。2024–2026年三大小长假持续创历史新高，2026五一增速边际放缓（+3.6% vs 2025年+6.4%），清明+6.8%仍保持稳健。</p>
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchSmall('清明')">清明</button>
+    <button class="tab-btn" onclick="switchSmall('五一')">五一</button>
+    <button class="tab-btn" onclick="switchSmall('端午')">端午</button>
+  </div>
+  <div class="grid grid-2">
+    <div class="card"><div id="chart_small_tour" class="chart"></div></div>
+    <div class="card"><div id="chart_small_yoy" class="chart"></div></div>
+  </div>
+</div>
+
+<!-- 3. 中秋+国庆 -->
+<div class="section">
+  <h2 class="section-title">03 · 国庆（含中秋）：黄金周的量级与央行支付突破</h2>
+  <p class="section-desc">国庆是全年体量最大的节假日。2019年银联+网联首次合并披露，达4.33万亿元；2025年国庆中秋8天合并达13.26万亿元，创历史新高。2026年国庆数据尚未发布（10月后更新）。</p>
+  <div class="card"><div id="chart_gq_combo" class="chart chart-lg"></div></div>
+  <div class="grid grid-2" style="margin-top:16px;">
+    <div class="card"><div id="chart_gq_permoney" class="chart"></div></div>
+    <div class="card"><div id="chart_gq_paytour" class="chart"></div></div>
+  </div>
+</div>
+
+<!-- 4. 同比变化矩阵 -->
+<div class="section">
+  <h2 class="section-title">04 · 日均同比变化矩阵（按节日 × 年份）</h2>
+  <p class="section-desc">使用"日均"口径消除假期天数变化的影响。红色=同比上升（中国惯例），绿色=同比下降，灰色=数据缺失。</p>
+  <div class="card"><div id="chart_heatmap" class="chart chart-lg"></div></div>
+</div>
+
+<!-- 5. 支付 vs 旅游增速背离 -->
+<div class="section">
+  <h2 class="section-title">05 · 支付交易金额 vs 旅游花费 增速对比</h2>
+  <p class="section-desc">央行支付交易金额增速显著快于旅游花费增速（2026春节支付+34.2% vs 旅游+18.7%），反映：① 线下现金向电子支付迁移的基数效应；② 非旅游类消费（零售、餐饮、转账）占比更高；③ 跨境支付在2024-2026年呈现爆发式增长（境外来华支付金额同比+45%~+128%）。</p>
+  <div class="card"><div id="chart_divergence" class="chart chart-lg"></div></div>
+</div>
+
+<!-- 6. 完整数据表 -->
+<div class="section">
+  <h2 class="section-title">06 · 完整数据表</h2>
+  <div class="card" style="overflow-x:auto;">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>年份</th><th>节日</th><th>天数</th>
+          <th>出游人次(亿)</th><th>总花费(亿元)</th><th>人均(元)</th>
+          <th>日均人次(亿)</th><th>日均花费(亿元)</th>
+          <th>央行支付笔数(亿)</th><th>支付金额(万亿元)</th>
+          <th>日均笔数(亿)</th><th>日均金额(万亿)</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 7. 行动建议 -->
+<div class="section">
+  <h2 class="section-title">07 · 核心结论与行动建议</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>核心结论</h3>
+      <ul class="insights">
+        <li><strong>① 春节与国庆双峰格局稳固，2026春节破万亿级临近</strong>：两大黄金周合计贡献六大节假日旅游花费的75%以上。2026春节9天旅游花费8034.83亿元（+18.7%）、央行支付13.12万亿元（+34.2%），均创历史新高。</li>
+        <li><strong>② 人均消费持续回升</strong>：2026春节人均1348元 vs 2025年1351元基本持平；五一人均571元 vs 2025年574元（微降-0.5%），仍未回到2019年603元的疫前高位。</li>
+        <li><strong>③ 央行支付笔数增速 ≫ 金额增速</strong>：2026春节日均笔数同比+37.45% vs 金额+19.26%；2026五一笔数+23.45% vs 金额+2.74%。说明小额高频场景（餐饮/景区购物/出行）成为主要拉动力。</li>
+        <li><strong>④ 小长假延续高景气</strong>：2026清明1.35亿人次(+6.8%)/613.67亿元(+6.6%)，"春假+清明"6天连休释放亲子需求；端午、中秋待观察。</li>
+        <li><strong>⑤ 入境消费爆发式增长</strong>：2026春节境外来华支付笔数/金额同比+78.10%/+44.33%；五一+45.15%/+36.96%；免签政策+"即买即退"退税扩围是核心催化剂。</li>
+        <li><strong>⑥ 假期延长改写同比口径</strong>：2026春节9天 vs 2025年8天，单纯总量同比+18.7%有天数红利；按日均口径旅游花费同比仅+5.5%。考核需分离天数效应。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>行动建议（按优先级）</h3>
+      <ul class="insights">
+        <li><span class="tag tag-p0">P0</span><strong>国庆+春节重点配置预算：</strong>广告/营销预算应向国庆（占全年节假日花费约42%）和春节（占约38%，2026升势）倾斜，合并配置比例建议≥70%。</li>
+        <li><span class="tag tag-p0">P0</span><strong>入境游关键词与素材立即落地：</strong>境外支付连续三个节点高增长，"China Travel"、免签、离境退税"即买即退"、跨省互认等多语种素材必须在2026端午/暑期前完成上线。</li>
+        <li><span class="tag tag-p1">P1</span><strong>五一增速放缓预警：</strong>2026五一人次/花费增速双双放缓至个位数且人均小幅下滑，"消费降级+错峰旅游"趋势下，需强化"品质度假"与"下沉目的地"双产品线对冲。</li>
+        <li><span class="tag tag-p1">P1</span><strong>小长假"多次短途"产品结构：</strong>清明、端午定位家庭亲子+周边游，设计3天内可达的目的地产品包，控制人均花费在300-500元区间以契合消费趋势。</li>
+        <li><span class="tag tag-p2">P2</span><strong>日均ROI口径替代总量口径：</strong>2026春节9天、2025国庆中秋8天、五一5天，总量同比包含天数红利，内部考核统一使用"日均转化/日均ROI"避免误判。</li>
+        <li><span class="tag tag-p3">P3</span><strong>支付场景协同营销：</strong>与银联/微信/支付宝合作节假日消费券联投，同时锁定文旅+支付双端流量；关注"碰一下"等NFC场景。</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  数据来源：中华人民共和国文化和旅游部 · 中国人民银行 · 中国银联 · 网联清算有限公司<br>
+  报告生成：2026-05-08 · 如数据存在出入以官方发布为准 · 标注"未披露"为官方未发布合并口径数据
+</div>
+
+</div>
+
+<script>
+// ========== 数据集 ==========
+const DATA = {
+  '春节': [
+    {y:2016,d:7,p:3.02,m:3651,n:'基础期'},
+    {y:2017,d:7,p:3.44,m:4233,n:''},
+    {y:2018,d:7,p:3.86,m:4750,n:''},
+    {y:2019,d:7,p:4.15,m:5139,n:'疫前高点'},
+    {y:2020,d:7,p:null,m:null,n:'疫情爆发·数据未披露'},
+    {y:2021,d:7,p:2.56,m:3011,n:'就地过年'},
+    {y:2022,d:7,p:2.51,m:2891.98,n:'冬奥 · 散点疫情'},
+    {y:2023,d:7,p:3.08,m:3758.43,n:'疫后复苏'},
+    {y:2024,d:8,p:4.74,m:6326.87,n:'超长假'},
+    {y:2025,d:8,p:5.01,m:6770.02,n:'历史新高'},
+    {y:2026,d:9,p:5.96,m:8034.83,n:'9天·史上最长'}
+  ],
+  '清明': [
+    {y:2016,d:3,p:0.956,m:401},
+    {y:2017,d:3,p:1.09,m:422},
+    {y:2018,d:3,p:1.01,m:421},
+    {y:2019,d:3,p:1.12,m:478.9,n:'疫前高点'},
+    {y:2020,d:3,p:0.434,m:82.6,n:'疫情最低谷'},
+    {y:2021,d:3,p:1.02,m:271.68},
+    {y:2022,d:3,p:0.754,m:187.83},
+    {y:2023,d:3,p:0.237,m:65.23,n:'注:此为出行口径'},
+    {y:2024,d:3,p:1.19,m:539.5},
+    {y:2025,d:3,p:1.26,m:575.5,n:'历史新高'},
+    {y:2026,d:3,p:1.35,m:613.67,n:'+6.8%/+6.6%'}
+  ],
+  '五一': [
+    {y:2016,d:3,p:1.35,m:612.15},
+    {y:2017,d:3,p:1.34,m:791},
+    {y:2018,d:3,p:1.47,m:871.6},
+    {y:2019,d:4,p:1.95,m:1176.7,n:'假期延至4天'},
+    {y:2020,d:5,p:1.15,m:475.6,n:'疫情·首次5天'},
+    {y:2021,d:5,p:2.3,m:1132.3},
+    {y:2022,d:5,p:1.6,m:646.8,n:'散点疫情'},
+    {y:2023,d:5,p:2.74,m:1480.56},
+    {y:2024,d:5,p:2.95,m:1668.9},
+    {y:2025,d:5,p:3.14,m:1802.69,n:'历史新高'},
+    {y:2026,d:5,p:3.25,m:1854.92,n:'+3.6%/+2.9%'}
+  ],
+  '端午': [
+    {y:2016,d:3,p:0.893,m:326.6},
+    {y:2017,d:3,p:0.826,m:314.9},
+    {y:2018,d:3,p:0.891,m:342.81},
+    {y:2019,d:3,p:0.959,m:393.3},
+    {y:2020,d:3,p:0.488,m:122.8,n:'疫情'},
+    {y:2021,d:3,p:0.891,m:294.3},
+    {y:2022,d:3,p:0.796,m:258.2},
+    {y:2023,d:3,p:1.06,m:373.10},
+    {y:2024,d:3,p:1.10,m:403.5},
+    {y:2025,d:3,p:1.19,m:427.5,n:'历史新高'},
+    {y:2026,d:null,p:null,m:null,n:'未到·5月底'}
+  ],
+  '中秋': [
+    {y:2016,d:3,p:1.05,m:472.3},
+    {y:2017,d:null,p:null,m:null,n:'与国庆合并8天'},
+    {y:2018,d:3,p:1.05,m:435},
+    {y:2019,d:3,p:1.05,m:472.8},
+    {y:2020,d:null,p:null,m:null,n:'与国庆合并8天'},
+    {y:2021,d:3,p:0.882,m:371.49},
+    {y:2022,d:3,p:0.734,m:286.8},
+    {y:2023,d:null,p:null,m:null,n:'与国庆合并8天'},
+    {y:2024,d:3,p:1.07,m:510.47},
+    {y:2025,d:null,p:null,m:null,n:'与国庆合并8天'},
+    {y:2026,d:null,p:null,m:null,n:'未到·9月底'}
+  ],
+  '国庆': [
+    {y:2016,d:7,p:5.93,m:4822},
+    {y:2017,d:8,p:7.05,m:5836,n:'中秋国庆8天'},
+    {y:2018,d:7,p:7.26,m:5990.8},
+    {y:2019,d:7,p:7.82,m:6497.1,n:'疫前高点'},
+    {y:2020,d:8,p:6.37,m:4665.6,n:'中秋国庆8天·疫情'},
+    {y:2021,d:7,p:5.15,m:3890.61},
+    {y:2022,d:7,p:4.22,m:2872.1,n:'散点疫情'},
+    {y:2023,d:8,p:8.26,m:7534.3,n:'中秋国庆8天'},
+    {y:2024,d:7,p:7.65,m:7008.17},
+    {y:2025,d:8,p:8.88,m:8090.06,n:'中秋国庆8天·历史新高'},
+    {y:2026,d:null,p:null,m:null,n:'未到·10月'}
+  ]
+};
+
+// 央行支付数据（银联+网联）
+const PAY = {
+  '春节': [
+    {y:2016,pay:null,cnt:null},
+    {y:2017,pay:null,cnt:null},
+    {y:2018,pay:0.68,cnt:null,n:'仅银联'},
+    {y:2019,pay:1.16,cnt:null,n:'仅银联'},
+    {y:2020,pay:null,cnt:null},
+    {y:2021,pay:4.98,cnt:79.37,n:'仅银联7天'},
+    {y:2022,pay:14.9,cnt:208.4,d:7,n:'含商行全口径'},
+    {y:2023,pay:null,cnt:null},
+    {y:2024,pay:7.74,cnt:153.8,d:6,n:'除夕至初五'},
+    {y:2025,pay:9.78,cnt:254.16,d:8},
+    {y:2026,pay:13.12,cnt:393.02,d:9,n:'日均+19.26%/+37.45%'}
+  ],
+  '五一': [
+    {y:2024,pay:7.40,cnt:194.6,d:5,n:'估算'},
+    {y:2025,pay:7.64,cnt:234.39,d:5},
+    {y:2026,pay:7.85,cnt:289.37,d:5,n:'笔数+23.45%/金额+2.74%'}
+  ],
+  '国庆': [
+    {y:2018,pay:1.58,cnt:7.94,d:7,n:'仅银联'},
+    {y:2019,pay:4.33,cnt:85.94,d:7,n:'首次合并披露'},
+    {y:2024,pay:8.40,cnt:228.69,d:7},
+    {y:2025,pay:13.26,cnt:415.52,d:8,n:'中秋国庆合并'}
+  ]
+};
+
+// ========== 图表配置通用 ==========
+const baseOpt = {
+  backgroundColor:'transparent',
+  textStyle:{color:'#e6edf3',fontFamily:'-apple-system,"PingFang SC"'},
+  grid:{left:50,right:30,top:50,bottom:40},
+  tooltip:{trigger:'axis',backgroundColor:'#1a2027',borderColor:'#2a3441',textStyle:{color:'#e6edf3'}},
+  legend:{textStyle:{color:'#8b949e'},top:10}
+};
+
+// ---------- 春节 旅游 ----------
+(function(){
+  const d = DATA['春节'];
+  const years = d.map(x=>x.y);
+  const persons = d.map(x=>x.p);
+  const money = d.map(x=>x.m);
+  const chart = echarts.init(document.getElementById('chart_spring_tour'));
+  chart.setOption({...baseOpt,
+    title:{text:'春节假期 · 旅游人次 & 花费',textStyle:{color:'#e6edf3',fontSize:15}},
+    legend:{data:['旅游人次(亿)','旅游花费(亿元)'],textStyle:{color:'#8b949e'},top:30},
+    grid:{left:50,right:60,top:70,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:[
+      {type:'value',name:'人次(亿)',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+      {type:'value',name:'花费(亿元)',axisLabel:{color:'#8b949e'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'旅游人次(亿)',type:'bar',data:persons,itemStyle:{color:'#58a6ff'},barWidth:'35%'},
+      {name:'旅游花费(亿元)',type:'line',yAxisIndex:1,data:money,itemStyle:{color:'#f85149'},lineStyle:{width:3},symbolSize:8,smooth:true}
+    ],
+    markArea:{silent:true,data:[[{name:'疫情期',xAxis:'2020'},{xAxis:'2022'}]],itemStyle:{color:'rgba(255,159,67,.1)'}}
+  });
+})();
+
+// ---------- 春节 支付 ----------
+(function(){
+  const pay = PAY['春节'];
+  const years = pay.map(x=>x.y);
+  const amt = pay.map(x=>x.pay);
+  const cnt = pay.map(x=>x.cnt);
+  const chart = echarts.init(document.getElementById('chart_spring_pay'));
+  chart.setOption({...baseOpt,
+    title:{text:'春节假期 · 银联+网联支付交易',textStyle:{color:'#e6edf3',fontSize:15}},
+    legend:{data:['交易金额(万亿元)','交易笔数(亿笔)'],textStyle:{color:'#8b949e'},top:30},
+    grid:{left:50,right:60,top:70,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:[
+      {type:'value',name:'金额(万亿)',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+      {type:'value',name:'笔数(亿)',axisLabel:{color:'#8b949e'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'交易金额(万亿元)',type:'bar',data:amt,itemStyle:{color:'#a371f7'},barWidth:'35%'},
+      {name:'交易笔数(亿笔)',type:'line',yAxisIndex:1,data:cnt,itemStyle:{color:'#ff9f43'},lineStyle:{width:3},symbolSize:8,smooth:true,connectNulls:true}
+    ]
+  });
+})();
+
+// ---------- 春节日均对比 ----------
+(function(){
+  const d = DATA['春节'], p = PAY['春节'];
+  const years = d.map(x=>x.y);
+  const dailyTour = d.map(x=>x.m&&x.d?+(x.m/x.d).toFixed(1):null);
+  const dailyPay = years.map(y=>{
+    const pp = p.find(x=>x.y===y);
+    if(!pp||pp.pay==null) return null;
+    const days = pp.d || 7;
+    return +(pp.pay/days*10000).toFixed(0);
+  });
+  const chart = echarts.init(document.getElementById('chart_spring_daily'));
+  chart.setOption({...baseOpt,
+    legend:{data:['日均旅游花费(亿元)','日均支付金额(亿元)'],textStyle:{color:'#8b949e'},top:10},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:{type:'value',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+    series:[
+      {name:'日均旅游花费(亿元)',type:'line',data:dailyTour,areaStyle:{color:'rgba(88,166,255,.2)'},itemStyle:{color:'#58a6ff'},lineStyle:{width:3},symbolSize:8,smooth:true,connectNulls:false},
+      {name:'日均支付金额(亿元)',type:'line',data:dailyPay,areaStyle:{color:'rgba(163,113,247,.2)'},itemStyle:{color:'#a371f7'},lineStyle:{width:3},symbolSize:8,smooth:true,connectNulls:false}
+    ]
+  });
+})();
+
+// ---------- 小长假切换 ----------
+let currentSmall='清明';
+let smallChart1=null, smallChart2=null;
+function drawSmall(key){
+  currentSmall=key;
+  document.querySelectorAll('.tab-row .tab-btn').forEach((b,i)=>{
+    const t=['清明','五一','端午'][i];
+    b.classList.toggle('active',t===key);
+  });
+  const d = DATA[key];
+  const years = d.map(x=>x.y);
+  const persons = d.map(x=>x.p);
+  const money = d.map(x=>x.m);
+  const perPerson = d.map(x=>x.p&&x.m?+(x.m/x.p*100).toFixed(0):null);
+
+  // 上：总量（复用实例，避免重复 init 报错）
+  const dom1 = document.getElementById('chart_small_tour');
+  if(!smallChart1) smallChart1 = echarts.init(dom1);
+  smallChart1.clear();
+  smallChart1.setOption({...baseOpt,
+    title:{text:key+'假期 · 旅游人次 & 花费',textStyle:{color:'#e6edf3',fontSize:15}},
+    legend:{data:['旅游人次(亿)','旅游花费(亿元)'],textStyle:{color:'#8b949e'},top:30},
+    grid:{left:50,right:60,top:70,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:[
+      {type:'value',name:'人次(亿)',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+      {type:'value',name:'花费(亿元)',axisLabel:{color:'#8b949e'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'旅游人次(亿)',type:'bar',data:persons,itemStyle:{color:'#58a6ff'},barWidth:'35%'},
+      {name:'旅游花费(亿元)',type:'line',yAxisIndex:1,data:money,itemStyle:{color:'#f85149'},lineStyle:{width:3},symbolSize:8,smooth:true}
+    ]
+  });
+
+  // 下：同比变化 + 人均消费
+  const yoy = d.map((x,i)=>{
+    if(i===0||!x.p||!d[i-1].p)return null;
+    return +((x.p/d[i-1].p-1)*100).toFixed(1);
+  });
+  const dom2 = document.getElementById('chart_small_yoy');
+  if(!smallChart2) smallChart2 = echarts.init(dom2);
+  smallChart2.clear();
+  smallChart2.setOption({...baseOpt,
+    title:{text:key+'假期 · 人次同比 & 人均花费',textStyle:{color:'#e6edf3',fontSize:15}},
+    legend:{data:['人次同比(%)','人均花费(元)'],textStyle:{color:'#8b949e'},top:30},
+    grid:{left:60,right:60,top:70,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:[
+      {type:'value',name:'同比(%)',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+      {type:'value',name:'人均(元)',axisLabel:{color:'#8b949e'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'人次同比(%)',type:'bar',data:yoy,itemStyle:{color:function(p){return p.value>=0?'#f85149':'#3fb950';}},barWidth:'35%'},
+      {name:'人均花费(元)',type:'line',yAxisIndex:1,data:perPerson,itemStyle:{color:'#d29922'},lineStyle:{width:3},symbolSize:8,smooth:true}
+    ]
+  });
+}
+function switchSmall(k){drawSmall(k);}
+drawSmall('清明');
+
+// ---------- 国庆综合 ----------
+(function(){
+  const d = DATA['国庆'], p = PAY['国庆'];
+  const years = d.map(x=>x.y);
+  const persons = d.map(x=>x.p);
+  const money = d.map(x=>x.m);
+  const payAmt = years.map(y=>{const pp=p.find(x=>x.y===y);return pp?pp.pay:null;});
+
+  const chart = echarts.init(document.getElementById('chart_gq_combo'));
+  chart.setOption({...baseOpt,
+    legend:{data:['出游人次(亿)','旅游花费(亿元)','央行支付金额(万亿元)'],textStyle:{color:'#8b949e'},top:10},
+    grid:{left:50,right:70,top:60,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:[
+      {type:'value',name:'人次(亿)/万亿元',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+      {type:'value',name:'亿元',axisLabel:{color:'#8b949e'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'出游人次(亿)',type:'bar',data:persons,itemStyle:{color:'#58a6ff'},barWidth:'22%'},
+      {name:'旅游花费(亿元)',type:'line',yAxisIndex:1,data:money,itemStyle:{color:'#f85149'},lineStyle:{width:3},symbolSize:8,smooth:true},
+      {name:'央行支付金额(万亿元)',type:'bar',data:payAmt,itemStyle:{color:'#a371f7'},barWidth:'22%'}
+    ]
+  });
+})();
+
+// 国庆 人均
+(function(){
+  const d = DATA['国庆'];
+  const years = d.map(x=>x.y);
+  const perPerson = d.map(x=>x.p&&x.m?+(x.m/x.p*100).toFixed(0):null);
+  const daily = d.map(x=>x.m&&x.d?+(x.m/x.d).toFixed(1):null);
+  const chart = echarts.init(document.getElementById('chart_gq_permoney'));
+  chart.setOption({...baseOpt,
+    title:{text:'国庆 · 人均花费 & 日均花费',textStyle:{color:'#e6edf3',fontSize:15}},
+    legend:{data:['人均花费(元)','日均花费(亿元)'],textStyle:{color:'#8b949e'},top:30},
+    grid:{left:60,right:60,top:70,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:[
+      {type:'value',name:'人均(元)',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+      {type:'value',name:'日均(亿元)',axisLabel:{color:'#8b949e'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'人均花费(元)',type:'line',data:perPerson,areaStyle:{color:'rgba(210,153,34,.2)'},itemStyle:{color:'#d29922'},lineStyle:{width:3},symbolSize:8,smooth:true},
+      {name:'日均花费(亿元)',type:'line',yAxisIndex:1,data:daily,itemStyle:{color:'#3fb950'},lineStyle:{width:3},symbolSize:8,smooth:true}
+    ]
+  });
+})();
+
+// 国庆 支付/旅游 比值
+(function(){
+  const d = DATA['国庆'], p = PAY['国庆'];
+  const years = d.map(x=>x.y);
+  const ratio = years.map(y=>{
+    const dd = d.find(x=>x.y===y), pp = p.find(x=>x.y===y);
+    if(!dd||!pp||!pp.pay||!dd.m) return null;
+    return +((pp.pay*10000)/dd.m).toFixed(1);
+  });
+  const chart = echarts.init(document.getElementById('chart_gq_paytour'));
+  chart.setOption({...baseOpt,
+    title:{text:'国庆 · 央行支付金额 / 旅游花费 倍数',textStyle:{color:'#e6edf3',fontSize:15}},
+    grid:{left:50,right:30,top:70,bottom:40},
+    xAxis:{type:'category',data:years,axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e'}},
+    yAxis:{type:'value',name:'倍数',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+    series:[
+      {name:'支付/旅游',type:'bar',data:ratio,itemStyle:{color:function(p){
+        const v=p.value;return v>15?'#f85149':v>10?'#ff9f43':'#58a6ff';
+      }},barWidth:'50%',label:{show:true,position:'top',color:'#e6edf3',formatter:'{c}x'}}
+    ]
+  });
+})();
+
+// ---------- 热力图 ----------
+(function(){
+  const holidays = ['春节','清明','五一','端午','中秋','国庆'];
+  const years = [2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+  const matrix = [];
+  holidays.forEach((h,hi)=>{
+    const arr = DATA[h];
+    years.forEach((y,yi)=>{
+      if(yi===0) return;
+      const cur = arr.find(x=>x.y===y);
+      const prev = arr.find(x=>x.y===y-1);
+      if(!cur||!prev||!cur.p||!prev.p||!cur.d||!prev.d){
+        matrix.push([yi,hi,null]); return;
+      }
+      const dailyCur = cur.p/cur.d;
+      const dailyPrev = prev.p/prev.d;
+      matrix.push([yi,hi,+((dailyCur/dailyPrev-1)*100).toFixed(1)]);
+    });
+    matrix.push([0,hi,null]);
+  });
+  const chart = echarts.init(document.getElementById('chart_heatmap'));
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{backgroundColor:'#1a2027',borderColor:'#2a3441',textStyle:{color:'#e6edf3'},
+      formatter:p=>{
+        const h=holidays[p.value[1]],y=years[p.value[0]],v=p.value[2];
+        return `${y}年 ${h}<br/>日均人次同比: ${v==null?'未披露':v+'%'}`;
+      }
+    },
+    grid:{left:70,right:50,top:30,bottom:50},
+    xAxis:{type:'category',data:years,axisLabel:{color:'#8b949e'},splitArea:{show:true}},
+    yAxis:{type:'category',data:holidays,axisLabel:{color:'#8b949e'},splitArea:{show:true}},
+    visualMap:{
+      min:-60,max:60,calculable:true,orient:'horizontal',bottom:10,left:'center',
+      textStyle:{color:'#8b949e'},
+      // 中国惯例：涨红跌绿
+      inRange:{color:['#3fb950','#2d5f3a','#2a3441','#5c3e1f','#f85149']}
+    },
+    series:[{
+      name:'日均人次同比',type:'heatmap',data:matrix,
+      label:{show:true,color:'#e6edf3',fontSize:11,formatter:p=>p.value[2]==null?'—':p.value[2]+'%'},
+      emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,.5)'}}
+    }]
+  });
+})();
+
+// ---------- 增速背离 ----------
+(function(){
+  // 春节+国庆 央行支付金额 vs 旅游花费 同比
+  const rows = [];
+  ['春节','国庆'].forEach(h=>{
+    const d = DATA[h], p = PAY[h];
+    d.forEach((cur,i)=>{
+      if(i===0) return;
+      const prev = d[i-1];
+      if(!cur.p||!prev.p) return;
+      const tourYoY = (cur.m/prev.m-1)*100;
+      const pc = p.find(x=>x.y===cur.y);
+      const pp = p.find(x=>x.y===prev.y);
+      let payYoY = null;
+      if(pc&&pp&&pc.pay&&pp.pay) payYoY = (pc.pay/pp.pay-1)*100;
+      rows.push({label:`${h}'${cur.y%100}`,tour:+tourYoY.toFixed(1),pay:payYoY==null?null:+payYoY.toFixed(1)});
+    });
+  });
+  const chart = echarts.init(document.getElementById('chart_divergence'));
+  chart.setOption({...baseOpt,
+    legend:{data:['旅游花费 同比(%)','央行支付金额 同比(%)'],textStyle:{color:'#8b949e'},top:10},
+    grid:{left:50,right:30,top:50,bottom:60},
+    xAxis:{type:'category',data:rows.map(r=>r.label),axisLine:{lineStyle:{color:'#2a3441'}},axisLabel:{color:'#8b949e',rotate:30}},
+    yAxis:{type:'value',name:'同比(%)',axisLabel:{color:'#8b949e'},splitLine:{lineStyle:{color:'#2a3441'}}},
+    series:[
+      {name:'旅游花费 同比(%)',type:'bar',data:rows.map(r=>r.tour),itemStyle:{color:'#58a6ff'},barWidth:'35%'},
+      {name:'央行支付金额 同比(%)',type:'bar',data:rows.map(r=>r.pay),itemStyle:{color:'#a371f7'},barWidth:'35%'}
+    ]
+  });
+})();
+
+// ---------- 数据表 ----------
+(function(){
+  const tbody = document.getElementById('tbody');
+  const order = ['春节','清明','五一','端午','中秋','国庆'];
+  let html = '';
+  [2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026].forEach(y=>{
+    order.forEach(h=>{
+      const row = DATA[h].find(x=>x.y===y);
+      if(!row||row.d==null) {
+        html += `<tr><td>${y}</td><td>${h}</td><td colspan="11" style="text-align:center;color:var(--muted);">${row?row.n||'—':'—'}</td></tr>`;
+        return;
+      }
+      const per = row.m&&row.p?Math.round(row.m/row.p*100):null;
+      const dP = row.p?(row.p/row.d).toFixed(3):'—';
+      const dM = row.m?(row.m/row.d).toFixed(1):'—';
+      const pay = PAY[h]?PAY[h].find(x=>x.y===y):null;
+      const payCnt = pay?pay.cnt:null;
+      const payAmt = pay?pay.pay:null;
+      const payDays = pay&&pay.d?pay.d:row.d;
+      const dPayCnt = payCnt?(payCnt/payDays).toFixed(2):'—';
+      const dPayAmt = payAmt?(payAmt/payDays).toFixed(3):'—';
+      html += `<tr>
+        <td>${y}</td><td>${h}</td><td>${row.d}</td>
+        <td>${row.p??'—'}</td><td>${row.m??'—'}</td><td>${per??'—'}</td>
+        <td>${dP}</td><td>${dM}</td>
+        <td>${payCnt??'—'}</td><td>${payAmt??'—'}</td>
+        <td>${dPayCnt}</td><td>${dPayAmt}</td>
+        <td style="color:var(--muted);font-size:12px;">${row.n||''}</td>
+      </tr>`;
+    });
+  });
+  tbody.innerHTML = html;
+})();
+
+// 响应式
+window.addEventListener('resize',()=>{
+  document.querySelectorAll('.chart,.chart-lg').forEach(el=>{
+    const inst = echarts.getInstanceByDom(el);
+    if(inst) inst.resize();
+  });
+});
+</script>
+</body>
+</html>
